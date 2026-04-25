@@ -107,7 +107,7 @@ const taskForm = document.getElementById('task-form');
 const taskInput = document.getElementById('task-input');
 
 // Функция добавления новой задачи
-// Зачем: создаёт объект задачи с уникальным ID и добавляет в массив
+// создаёт объект задачи с уникальным ID и добавляет в массив
 function addTask(text) {
   // Проверяем, что текст не пустой и не состоит только из пробелов
   if (!text || text.trim() === '') {
@@ -138,7 +138,7 @@ function addTask(text) {
 }
 
 // Обработчик отправки формы
-// Зачем: добавляет задачу при клике на кнопку "Добавить" без перезагрузки страницы
+// добавляет задачу при клике на кнопку "Добавить" без перезагрузки страницы
 taskForm.addEventListener('submit', function(event) {
   event.preventDefault(); // Блокируем стандартную отправку формы
 
@@ -156,14 +156,14 @@ const filterActive = document.getElementById('filter-active');
 const filterDone = document.getElementById('filter-done');
 
 // Обработчик поля поиска
-// Зачем: фильтрует задачи в реальном времени при вводе текста
+// фильтрует задачи в реальном времени при вводе текста
 searchInput.addEventListener('input', function() {
   searchQuery = this.value;
   renderTasks();
 });
 
 // Обработчики кнопок фильтрации
-// Зачем: показывают задачи только выбранного статуса
+// показывают задачи только выбранного статуса
 filterAll.addEventListener('click', function() {
   currentFilter = 'all';
   updateFilterButtons(filterAll);
@@ -183,7 +183,7 @@ filterDone.addEventListener('click', function() {
 });
 
 // Функция обновления подсветки кнопок фильтров
-// Зачем: показывает пользователю, какой фильтр сейчас активен
+// показывает пользователю, какой фильтр сейчас активен
 function updateFilterButtons(activeButton) {
   // Убираем класс active со всех кнопок
   filterAll.classList.remove('active');
