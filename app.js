@@ -42,5 +42,45 @@ function renderTasks() {
   });
 }
 
+// Получаем элементы формы из DOM
+const taskForm = document.getElementById('task-form');
+const taskInput = document.getElementById('task-input');
+
+// Функция добавления новой задачи
+// Зачем: создаёт объект задачи с уникальным ID и добавляет в массив
+function addTask(text) {
+  // Проверяем, что текст не пустой и не состоит только из пробелов
+  if (!text || text.trim() === '') {
+    return;
+  }
+
+  // Находим максимальный ID и создаём новый
+  const maxId = tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) : 0;
+  const newId = maxId + 1;
+
+  // Создаём новую задачу
+  const newTask = {
+    id: newId,
+    text: text.trim(),
+    completed: false
+  };
+
+  // Добавляем в массив и перерисовываем список
+  tasks.push(newTask);
+  renderTasks();
+}
+
+// Обработчик отправки формы
+// Зачем: добавляет задачу при клике на кнопку "Добавить" без перезагрузки страницы
+taskForm.addEventListener('submit', function(event) {
+  event.preventDefault(); // Блокируем стандартную отправку формы
+
+  const inputValue = taskInput.value;
+  addTask(inputValue);
+
+  taskInput.value = ''; // Очищаем поле ввода
+  taskInput.focus(); // Возвращаем фокус на поле ввода
+});
+
 // Рендеринг при загрузке страницы
 document.addEventListener('DOMContentLoaded', renderTasks);
