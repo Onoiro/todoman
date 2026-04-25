@@ -6,6 +6,10 @@ const tasks = [
   { id: 4, text: 'Записаться к врачу', completed: false }
 ];
 
+// Переменные для фильтрации и поиска
+let currentFilter = 'all'; // 'all' | 'active' | 'completed'
+let searchQuery = '';
+
 // Функция удаления задачи
 // Зачем: удаляет задачу из массива по ID и перерисовывает список
 function deleteTask(id) {
@@ -26,12 +30,39 @@ function toggleTask(id) {
   }
 }
 
+// Функция получения отфильтрованных задач
+// Зачем: возвращает массив задач с учётом текущего фильтра и поиска
+function getFilteredTasks() {
+  let filtered = tasks;
+
+  // Применяем фильтр по статусу
+  if (currentFilter === 'active') {
+    filtered = filtered.filter(task => task.completed === false);
+  } else if (currentFilter === 'completed') {
+    filtered = filtered.filter(task => task.completed === true);
+  }
+  // Если currentFilter === 'all', фильтра не применяем
+
+  // Применяем поиск по тексту
+  if (searchQuery) {
+    const query = searchQuery.toLowerCase();
+    filtered = filtered.filter(task => 
+      task.text.toLowerCase().includes(query)
+    );
+  }
+
+  return filtered;
+}
+
 // Функция рендеринга задач
 function renderTasks() {
   const taskList = document.getElementById('task-list');
   taskList.innerHTML = '';
 
-  tasks.forEach(task => {
+  // Используем отфильтрованный массив задач
+  const filteredTasks = getFilteredTasks();
+
+  filteredTasks.forEach(task => {
     const li = document.createElement('li');
     li.setAttribute('data-id', task.id);
 
@@ -118,5 +149,52 @@ taskForm.addEventListener('submit', function(event) {
   taskInput.focus(); // Возвращаем фокус на поле ввода
 });
 
+// Получаем элементы фильтров и поиска
+const searchInput = document.getElementById('search-input');
+const filterAll = document.getElementById('filter-all');
+const filterActive = document.getElementById('filter-active');
+const filterDone = document.getElementById('filter-done');
+
+// Обработчик поля поиска
+// Зачем: фильтрует задачи в реальном времени при вводе текста
+searchInput.addEventListener('input', function() {
+  searchQuery = this.value;
+  renderTasks();
+});
+
+// Обработчики кнопок фильтрации
+// Зачем: показывают задачи только выбранного статуса
+filterAll.addEventListener('click', function() {
+  currentFilter = 'all';
+  updateFilterButtons(filterAll);
+  renderTasks();
+});
+
+filterActive.addEventListener('click', function() {
+  currentFilter = 'active';
+  updateFilterButtons(filterActive);
+  renderTasks();
+});
+
+filterDone.addEventListener('click', function() {
+  currentFilter = 'completed';
+  updateFilterButtons(filterDone);
+  renderTasks();
+});
+
+// Функция обновления подсветки кнопок фильтров
+// Зачем: показывает пользователю, какой фильтр сейчас активен
+function updateFilterButtons(activeButton) {
+  // Убираем класс active со всех кнопок
+  filterAll.classList.remove('active');
+  filterActive.classList.remove('active');
+  filterDone.classList.remove('active');
+  // Добавляем нажатой кнопке
+  activeButton.classList.add('active');
+}
+
 // Рендеринг при загрузке страницы
-document.addEventListener('DOMContentLoaded', renderTasks);
+document.addEventListener('DOMContentLoaded', function() {
+  renderTasks();
+  updateFilterButtons(filterAll); // Подсвечиваем "Все" по умолчанию
+});

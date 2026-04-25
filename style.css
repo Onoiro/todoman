@@ -136,6 +136,12 @@ main {
   background-color: #e0e0e0;
 }
 
+#filter-panel button.active {
+  background-color: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
+}
+
 footer {
   text-align: center;
   padding: 20px;
