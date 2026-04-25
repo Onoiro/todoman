@@ -6,6 +6,26 @@ const tasks = [
   { id: 4, text: 'Записаться к врачу', completed: false }
 ];
 
+// Функция удаления задачи
+// Зачем: удаляет задачу из массива по ID и перерисовывает список
+function deleteTask(id) {
+  const index = tasks.findIndex(task => task.id === id);
+  if (index !== -1) {
+    tasks.splice(index, 1);
+    renderTasks();
+  }
+}
+
+// Функция смены статуса задачи
+// Зачем: переключает completed true/false и перерисовывает список
+function toggleTask(id) {
+  const task = tasks.find(task => task.id === id);
+  if (task) {
+    task.completed = !task.completed;
+    renderTasks();
+  }
+}
+
 // Функция рендеринга задач
 function renderTasks() {
   const taskList = document.getElementById('task-list');
@@ -39,6 +59,15 @@ function renderTasks() {
     li.appendChild(deleteBtn);
 
     taskList.appendChild(li);
+
+    // Добавляем обработчики событий
+    checkbox.addEventListener('change', function() {
+      toggleTask(task.id);
+    });
+
+    deleteBtn.addEventListener('click', function() {
+      deleteTask(task.id);
+    });
   });
 }
 
