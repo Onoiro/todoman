@@ -54,6 +54,13 @@ function addTask(text) {
     return;
   }
 
+  // Ограничиваем длину текста до 100 символов
+  const trimmedText = text.trim();
+  if (trimmedText.length > 100) {
+    alert('Задача слишком длинная! Максимум 100 символов.');
+    return;
+  }
+
   // Находим максимальный ID и создаём новый
   const maxId = tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) : 0;
   const newId = maxId + 1;
@@ -61,7 +68,7 @@ function addTask(text) {
   // Создаём новую задачу
   const newTask = {
     id: newId,
-    text: text.trim(),
+    text: trimmedText,
     completed: false
   };
 
