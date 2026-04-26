@@ -116,9 +116,31 @@ function renderTasks() {
       toggleTask(task.id);
     });
 
+    // Touch-события для чекбокса (немедленный отклик)
+    checkbox.addEventListener('touchstart', function(e) {
+      e.stopPropagation();
+      this.style.transform = 'scale(0.9)';
+    }, { passive: true });
+
+    checkbox.addEventListener('touchend', function(e) {
+      e.stopPropagation();
+      this.style.transform = '';
+    }, { passive: true });
+
     deleteBtn.addEventListener('click', function() {
       deleteTask(task.id);
     });
+
+    // Touch-события для кнопки удаления (немедленный отклик)
+    deleteBtn.addEventListener('touchstart', function(e) {
+      e.stopPropagation();
+      this.style.transform = 'scale(0.95)';
+    }, { passive: true });
+
+    deleteBtn.addEventListener('touchend', function(e) {
+      e.stopPropagation();
+      this.style.transform = '';
+    }, { passive: true });
   });
 }
 
@@ -170,6 +192,22 @@ taskForm.addEventListener('submit', function(event) {
   taskInput.focus(); // Возвращаем фокус на поле ввода
 });
 
+// Touch-обработчик для кнопки добавления (мгновенный отклик)
+const addButton = taskForm.querySelector('button');
+if (addButton) {
+  addButton.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    this.style.transform = 'scale(0.98)';
+  }, { passive: false });
+
+  addButton.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    this.style.transform = '';
+    // Триггерим отправку формы
+    taskForm.dispatchEvent(new Event('submit'));
+  }, { passive: false });
+}
+
 // Получаем элементы фильтров и поиска
 const searchInput = document.getElementById('search-input');
 const filterAll = document.getElementById('filter-all');
@@ -183,7 +221,7 @@ searchInput.addEventListener('input', function() {
   renderTasks();
 });
 
-// Обработчики кнопок фильтрации
+// Обработчики кнопок фильтрации с touch-событиями
 // показывают задачи только выбранного статуса
 filterAll.addEventListener('click', function() {
   currentFilter = 'all';
@@ -191,17 +229,56 @@ filterAll.addEventListener('click', function() {
   renderTasks();
 });
 
+filterAll.addEventListener('touchstart', function(e) {
+  e.preventDefault();
+  this.style.transform = 'scale(0.95)';
+}, { passive: false });
+
+filterAll.addEventListener('touchend', function(e) {
+  e.preventDefault();
+  this.style.transform = '';
+  currentFilter = 'all';
+  updateFilterButtons(filterAll);
+  renderTasks();
+}, { passive: false });
+
 filterActive.addEventListener('click', function() {
   currentFilter = 'active';
   updateFilterButtons(filterActive);
   renderTasks();
 });
 
+filterActive.addEventListener('touchstart', function(e) {
+  e.preventDefault();
+  this.style.transform = 'scale(0.95)';
+}, { passive: false });
+
+filterActive.addEventListener('touchend', function(e) {
+  e.preventDefault();
+  this.style.transform = '';
+  currentFilter = 'active';
+  updateFilterButtons(filterActive);
+  renderTasks();
+}, { passive: false });
+
 filterDone.addEventListener('click', function() {
   currentFilter = 'completed';
   updateFilterButtons(filterDone);
   renderTasks();
 });
+
+filterDone.addEventListener('touchstart', function(e) {
+  e.preventDefault();
+  this.style.transform = 'scale(0.95)';
+}, { passive: false });
+
+filterDone.addEventListener('touchend', function(e) {
+  e.preventDefault();
+  this.style.transform = '';
+  currentFilter = 'completed';
+  updateFilterButtons(filterDone);
+  renderTasks();
+}, { passive: false });
 
 // Функция обновления подсветки кнопок фильтров
 // показывает пользователю, какой фильтр сейчас активен
