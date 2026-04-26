@@ -1,31 +1,51 @@
 // Массив задач
-const tasks = [
-  { id: 1, text: 'Купить молоко', completed: false },
-  { id: 2, text: 'Сделать домашку', completed: false },
-  { id: 3, text: 'Позвонить другу', completed: true },
-  { id: 4, text: 'Записаться к врачу', completed: false }
-];
+let tasks = [];
 
 // Переменные для фильтрации и поиска
 let currentFilter = 'all'; // 'all' | 'active' | 'completed'
 let searchQuery = '';
 
-// Функция удаления задачи
-// Зачем: удаляет задачу из массива по ID и перерисовывает список
+// Сохранение задач в localStorage
+function saveTasks() {
+  try {
+    const jsonString = JSON.stringify(tasks);
+    localStorage.setItem('tasks', jsonString);
+  } catch (error) {
+    console.error('Ошибка при сохранении задач:', error);
+  }
+}
+
+// Загрузки задач из localStorage
+function loadTasks() {
+  try {
+    const savedTasks = localStorage.getItem('tasks');
+    if (savedTasks) {
+      tasks = JSON.parse(savedTasks);
+    } else {
+      tasks = [];
+    }
+  } catch (error) {
+    console.error('Ошибка при загрузке задач:', error);
+    tasks = [];
+  }
+}
+
+// Удаление задачи
 function deleteTask(id) {
   const index = tasks.findIndex(task => task.id === id);
   if (index !== -1) {
     tasks.splice(index, 1);
+    saveTasks();
     renderTasks();
   }
 }
 
-// Функция смены статуса задачи
-// Зачем: переключает completed true/false и перерисовывает список
+// Смена статуса задачи
 function toggleTask(id) {
   const task = tasks.find(task => task.id === id);
   if (task) {
     task.completed = !task.completed;
+    saveTasks();
     renderTasks();
   }
 }
@@ -134,6 +154,7 @@ function addTask(text) {
 
   // Добавляем в массив и перерисовываем список
   tasks.push(newTask);
+  saveTasks();
   renderTasks();
 }
 
@@ -195,6 +216,7 @@ function updateFilterButtons(activeButton) {
 
 // Рендеринг при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
+  loadTasks(); // Загружаем задачи из localStorage
   renderTasks();
   updateFilterButtons(filterAll); // Подсвечиваем "Все" по умолчанию
 });
