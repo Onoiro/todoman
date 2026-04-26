@@ -22,7 +22,23 @@ header {
 
 h1 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.logo {
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  font-weight: 800; /* Жирный шрифт для лого */
+  letter-spacing: -1px;
+  text-transform: uppercase;
+}
+
+.todo {
+  color: #d32f2f;
+}
+
+.man {
+  color: #4CAF50;
+  font-weight: 300; /* Тонкое начертание для контраста */
 }
 
 main {
