@@ -221,64 +221,36 @@ searchInput.addEventListener('input', function() {
   renderTasks();
 });
 
-// Обработчики кнопок фильтрации с touch-событиями
-// показывают задачи только выбранного статуса
-filterAll.addEventListener('click', function() {
-  currentFilter = 'all';
-  updateFilterButtons(filterAll);
-  renderTasks();
-});
+// Универсальная функция настройки кнопок фильтров
+// @param {HTMLElement} button - DOM-элемент кнопки
+// @param {string} filterValue - значение фильтра ('all' | 'active' | 'completed')
+function setupFilterButton(button, filterValue) {
+  const activate = () => {
+    currentFilter = filterValue;
+    updateFilterButtons(button);
+    renderTasks();
+  };
 
-filterAll.addEventListener('touchstart', function(e) {
-  e.preventDefault();
-  this.style.transform = 'scale(0.95)';
-}, { passive: false });
+  // Клик (работает на всех устройствах)
+  button.addEventListener('click', activate);
 
-filterAll.addEventListener('touchend', function(e) {
-  e.preventDefault();
-  this.style.transform = '';
-  currentFilter = 'all';
-  updateFilterButtons(filterAll);
-  renderTasks();
-}, { passive: false });
+  // Touch-события для мгновенного отклика на мобильных
+  button.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    this.style.transform = 'scale(0.95)';
+  }, { passive: false });
 
-filterActive.addEventListener('click', function() {
-  currentFilter = 'active';
-  updateFilterButtons(filterActive);
-  renderTasks();
-});
+  button.addEventListener('touchend', function(e) {
+    e.preventDefault();
+    this.style.transform = '';
+    activate(); // Применяем фильтр при отпускании
+  }, { passive: false });
+}
 
-filterActive.addEventListener('touchstart', function(e) {
-  e.preventDefault();
-  this.style.transform = 'scale(0.95)';
-}, { passive: false });
-
-filterActive.addEventListener('touchend', function(e) {
-  e.preventDefault();
-  this.style.transform = '';
-  currentFilter = 'active';
-  updateFilterButtons(filterActive);
-  renderTasks();
-}, { passive: false });
-
-filterDone.addEventListener('click', function() {
-  currentFilter = 'completed';
-  updateFilterButtons(filterDone);
-  renderTasks();
-});
-
-filterDone.addEventListener('touchstart', function(e) {
-  e.preventDefault();
-  this.style.transform = 'scale(0.95)';
-}, { passive: false });
-
-filterDone.addEventListener('touchend', function(e) {
-  e.preventDefault();
-  this.style.transform = '';
-  currentFilter = 'completed';
-  updateFilterButtons(filterDone);
-  renderTasks();
-}, { passive: false });
+// Настраиваем все три кнопки фильтра через универсальную функцию
+setupFilterButton(filterAll, 'all');
+setupFilterButton(filterActive, 'active');
+setupFilterButton(filterDone, 'completed');
 
 // Функция обновления подсветки кнопок фильтров
 // показывает пользователю, какой фильтр сейчас активен
