@@ -116,31 +116,9 @@ function renderTasks() {
       toggleTask(task.id);
     });
 
-    // Touch-события для чекбокса (немедленный отклик)
-    checkbox.addEventListener('touchstart', function(e) {
-      e.stopPropagation();
-      this.style.transform = 'scale(0.9)';
-    }, { passive: true });
-
-    checkbox.addEventListener('touchend', function(e) {
-      e.stopPropagation();
-      this.style.transform = '';
-    }, { passive: true });
-
     deleteBtn.addEventListener('click', function() {
       deleteTask(task.id);
     });
-
-    // Touch-события для кнопки удаления (немедленный отклик)
-    deleteBtn.addEventListener('touchstart', function(e) {
-      e.stopPropagation();
-      this.style.transform = 'scale(0.95)';
-    }, { passive: true });
-
-    deleteBtn.addEventListener('touchend', function(e) {
-      e.stopPropagation();
-      this.style.transform = '';
-    }, { passive: true });
   });
 }
 
@@ -192,22 +170,6 @@ taskForm.addEventListener('submit', function(event) {
   taskInput.focus(); // Возвращаем фокус на поле ввода
 });
 
-// Touch-обработчик для кнопки добавления (мгновенный отклик)
-const addButton = taskForm.querySelector('button');
-if (addButton) {
-  addButton.addEventListener('touchstart', function(e) {
-    e.preventDefault();
-    this.style.transform = 'scale(0.98)';
-  }, { passive: false });
-
-  addButton.addEventListener('touchend', function(e) {
-    e.preventDefault();
-    this.style.transform = '';
-    // Триггерим отправку формы
-    taskForm.dispatchEvent(new Event('submit'));
-  }, { passive: false });
-}
-
 // Получаем элементы фильтров и поиска
 const searchInput = document.getElementById('search-input');
 const filterAll = document.getElementById('filter-all');
@@ -225,26 +187,11 @@ searchInput.addEventListener('input', function() {
 // @param {HTMLElement} button - DOM-элемент кнопки
 // @param {string} filterValue - значение фильтра ('all' | 'active' | 'completed')
 function setupFilterButton(button, filterValue) {
-  const activate = () => {
+  button.addEventListener('click', function() {
     currentFilter = filterValue;
     updateFilterButtons(button);
     renderTasks();
-  };
-
-  // Клик (работает на всех устройствах)
-  button.addEventListener('click', activate);
-
-  // Touch-события для мгновенного отклика на мобильных
-  button.addEventListener('touchstart', function(e) {
-    e.preventDefault();
-    this.style.transform = 'scale(0.95)';
-  }, { passive: false });
-
-  button.addEventListener('touchend', function(e) {
-    e.preventDefault();
-    this.style.transform = '';
-    activate(); // Применяем фильтр при отпускании
-  }, { passive: false });
+  });
 }
 
 // Настраиваем все три кнопки фильтра через универсальную функцию

@@ -319,20 +319,11 @@ footer {
   }
 }
 
-/* Touch-оптимизированные стили */
+/* Touch-оптимизированные стили для мобильных устройств */
 @media (hover: none) and (pointer: coarse) {
-  #task-input,
-  #search-input,
-  #task-form button,
-  .task-checkbox,
-  .task-delete,
-  #filter-panel button {
-    touch-action: manipulation;
-  }
-
   #task-form button:active,
   .task-delete:active,
   #filter-panel button:active {
-    transform: scale(0.98);
+    transform: scale(0.95);
   }
 }
